@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Submit Something</title>
   <script>
+    const API_URL = "https://flask-supabase-backend.onrender.com";
     async function submitForm(event) {
       event.preventDefault();
       const input = document.getElementById("user_input").value;
-      const res = await fetch("https://your-flask-api.onrender.com/submit", {
+      const res = await fetch(`${API_URL}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_input: input })
