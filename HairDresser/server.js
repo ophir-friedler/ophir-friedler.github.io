@@ -5,6 +5,10 @@ const mysql = require('mysql2');
 const app = express();
 app.use(bodyParser.json());
 
+const cors = require('cors');
+app.use(cors());
+
+
 // Configure your MySQL connection
 const db = mysql.createConnection({
   host: 'localhost',
