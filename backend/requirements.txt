@@ -1,5 +1,0 @@
-flask
-supabase-py
-gunicorn
-python-dotenv
-flask-cors
