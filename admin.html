@@ -22,7 +22,8 @@
       list.innerHTML = "";
       data.forEach(item => {
         const li = document.createElement("li");
-        li.textContent = `${item.created_at}: ${item.content} | Time: ${item.selected_time}`;
+        const timeDisplay = item.selected_time ? item.selected_time : "N/A";
+        li.textContent = `${item.created_at}: ${item.content} | Time: ${timeDisplay}`;
 
         list.appendChild(li);
       });
