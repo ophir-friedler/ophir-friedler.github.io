@@ -18,8 +18,7 @@
       }
 
       const data = await res.json();
-      console.log(data);
-
+      
       const list = document.getElementById("submissions");
       list.innerHTML = "";
       data.forEach(item => {
