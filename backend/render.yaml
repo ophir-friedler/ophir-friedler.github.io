@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: flask-supabase-api
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SUPABASE_URL
+        value: https://your-project.supabase.co
+      - key: SUPABASE_KEY
+        value: your-anon-key
+      - key: ADMIN_PASSWORD
+        value: your-admin-password
