@@ -9,11 +9,8 @@
     async function login(event) {
       event.preventDefault();
       const password = document.getElementById("password").value;
-      const res = await fetch(`${API_URL}/admin`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
+      // Send password as a query parameter in GET request
+      const res = await fetch(`${API_URL}/admin?password=${encodeURIComponent(password)}`);
 
       if (res.status === 403) {
         alert("Wrong password");
