@@ -8,8 +8,8 @@ app.use(bodyParser.json());
 // Configure your MySQL connection
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'your_mysql_user',
-  password: 'your_mysql_password',
+  user: 'root',
+  password: 'mysql123',
   database: 'hairdresser'
 });
 

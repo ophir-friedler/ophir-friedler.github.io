@@ -1,0 +1,11 @@
+# Node.js dependencies
+node_modules/
+
+# Local environment variables
+.env
+
+# OS generated files
+.DS_Store
+
+# Server files with sensitive info
+HairDresser/server.js
