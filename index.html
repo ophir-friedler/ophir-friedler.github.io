@@ -1,29 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="assets/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Submit Something</title>
-  <script>
-    const API_URL = "https://flask-supabase-backend.onrender.com";
-    async function submitForm(event) {
-      event.preventDefault();
-      const input = document.getElementById("user_input").value;
-      const res = await fetch(`${API_URL}/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_input: input })
-      });
-      alert("Submitted!");
-      document.getElementById("user_input").value = "";
-    }
-  </script>
-</head>
-<body>
-  <h1>Submit a Message</h1>
-  <form onsubmit="submitForm(event)">
-    <input id="user_input" required>
-    <button type="submit">Submit</button>
-  </form>
-</body>
-</html>
+<form id="time-form">
+  <label for="datetime">Choose a time:</label>
+  <input type="datetime-local" id="datetime" name="datetime" required>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+document.getElementById("time-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const datetime = document.getElementById("datetime").value;
+
+  const response = await fetch("https://flask-supabase-backend.onrender.com/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ selected_time: datetime })
+  });
+
+  const result = await response.json();
+  alert(result.message || "Submitted!");
+});
+</script>
