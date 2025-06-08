@@ -41,18 +41,27 @@
   </div>
 
   <script>
-    const form = document.getElementById('bookingForm');
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const whatsapp = document.getElementById('whatsapp').value;
-      const datetime = document.getElementById('datetime').value;
+  const form = document.getElementById('bookingForm');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const whatsapp = document.getElementById('whatsapp').value;
+    const datetime = document.getElementById('datetime').value;
 
-      // Simulate submission (can later send to server or API)
+    const response = await fetch('http://localhost:3000/book', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ whatsapp, datetime })
+    });
+
+    if (response.ok) {
       const confirm = document.getElementById('confirmation');
       confirm.textContent = `Thanks! We’ll contact you on WhatsApp at ${whatsapp} to confirm your appointment on ${new Date(datetime).toLocaleString()}.`;
       confirm.style.display = 'block';
       form.style.display = 'none';
-    });
-  </script>
+    } else {
+      alert('There was an error. Please try again.');
+    }
+  });
+</script>
 </body>
 </html>
