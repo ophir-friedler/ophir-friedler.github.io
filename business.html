@@ -18,27 +18,27 @@
   </div>
 
   <script>
-    const API_URL = "https://flask-supabase-backend.onrender.com";
-    // Get business name from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const businessName = urlParams.get("name");
+  const API_URL = "https://flask-supabase-backend.onrender.com";
+  // Get business name from URL or localStorage
+  let businessName = new URLSearchParams(window.location.search).get("name") || localStorage.getItem("business_name");
 
-    // Optionally, fetch and display business info
-    if (businessName) {
-      document.getElementById("business-title").textContent = `קביעת תור ל${businessName}`;
-      // You can fetch business info/services here if needed
-    }
+  // Optionally, fetch and display business info
+  if (businessName) {
+    document.getElementById("business-title").textContent = `קביעת תור ל${businessName}`;
+    // You can fetch business info/services here if needed
+  }
 
-    document.getElementById("user_input").addEventListener("input", function (e) {
-      this.value = this.value.replace(/[^\d+]/g, '');
-    });
+  document.getElementById("user_input").addEventListener("input", function (e) {
+    this.value = this.value.replace(/[^\d+]/g, '');
+  });
 
-    document.getElementById("appointment-form").addEventListener("submit", function(event) {
-      event.preventDefault();
-      localStorage.setItem("user_input", document.getElementById("user_input").value);
-      localStorage.setItem("business_name", businessName);
-      window.location.href = `services.html?name=${encodeURIComponent(businessName)}`;
-    });
+  document.getElementById("appointment-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    localStorage.setItem("user_input", document.getElementById("user_input").value);
+    localStorage.setItem("business_name", businessName);
+    window.location.href = `services.html?name=${encodeURIComponent(businessName)}`;
+  });
+
   </script>
 </body>
 </html>
