@@ -1,3 +1,10 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f2f7fb;
@@ -8,6 +15,8 @@ body {
   justify-content: center;
   height: 100vh;
   direction: rtl;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 .container {
@@ -16,8 +25,13 @@ body {
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   width: 90%;
-  max-width: 400px;
+max-width: 600px;
   text-align: right;
+  margin: 0 auto;
+  padding: 24px 12px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow-y: visible;
 }
 
 h1 {

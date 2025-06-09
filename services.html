@@ -19,7 +19,12 @@
     </form>
     <p id="status"></p>
   </div>
+  <div id="user-submissions-section" style="display:none;">
+    <h3>ההזמנות הקודמות שלך</h3>
+    <div id="user-submissions-list"></div>
+  </div>
   <script>
+    const API_URL = "https://flask-supabase-backend.onrender.com";
     // Get business name from URL or localStorage
     let businessName = new URLSearchParams(window.location.search).get("business_name") || localStorage.getItem("business_name");
     if (businessName) {
@@ -38,6 +43,44 @@
       // Redirect to the date selection page, passing business name in URL
       window.location.href = `date.html?business_name=${encodeURIComponent(businessName)}`;
     });
+
+    const userInput = localStorage.getItem("user_input");
+
+    async function loadUserSubmissions() {
+      if (!userInput || !businessName) return;
+      const res = await fetch(`${API_URL}/user-submissions?user_input=${encodeURIComponent(userInput)}&business_name=${encodeURIComponent(businessName)}`);
+      if (!res.ok) {
+        document.getElementById("user-submissions-list").textContent = "שגיאה בטעינת ההזמנות.";
+        document.getElementById("user-submissions-section").style.display = "block";
+        return;
+      }
+      const submissions = await res.json();
+      renderUserSubmissions(submissions);
+    }
+
+    function renderUserSubmissions(submissions) {
+      const listDiv = document.getElementById("user-submissions-list");
+      listDiv.innerHTML = "";
+      if (!submissions.length) {
+        listDiv.textContent = "לא נמצאו הזמנות קודמות.";
+        document.getElementById("user-submissions-section").style.display = "block";
+        return;
+      }
+      submissions.forEach(sub => {
+        const div = document.createElement("div");
+        div.className = "user-submission-item";
+        div.innerHTML = `
+          <strong>שירותים:</strong> ${(sub.content?.selected_services || []).join(", ")}<br>
+          <strong>תאריך:</strong> ${sub.content?.selected_time || ""}<br>
+          <hr>
+        `;
+        listDiv.appendChild(div);
+      });
+      document.getElementById("user-submissions-section").style.display = "block";
+    }
+
+    // Call this when the page loads
+    loadUserSubmissions();
   </script>
 </body>
 </html>
