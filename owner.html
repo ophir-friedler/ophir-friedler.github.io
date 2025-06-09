@@ -9,7 +9,20 @@
 <body>
   <div class="container">
     <h1>הגדרות שירותים</h1>
-    <form id="owner-login-form">
+    <div id="choose-action">
+      <button id="new-business-btn">עסק חדש</button>
+      <button id="login-btn">התחברות לעסק קיים</button>
+    </div>
+
+    <form id="owner-register-form" style="display:none;">
+      <label for="register-business-name">שם העסק:</label>
+      <input type="text" id="register-business-name" required>
+      <label for="register-owner-password">בחר סיסמה:</label>
+      <input type="password" id="register-owner-password" required>
+      <button type="submit">צור עסק חדש</button>
+    </form>
+
+    <form id="owner-login-form" style="display:none;">
       <label for="business-name">שם העסק:</label>
       <input type="text" id="business-name" required>
       <label for="owner-password">סיסמת בעל העסק:</label>
@@ -35,6 +48,38 @@
     let ownerToken = null;
     let businessName = "";
 
+    // Show register or login form
+    document.getElementById("new-business-btn").onclick = function() {
+      document.getElementById("choose-action").style.display = "none";
+      document.getElementById("owner-register-form").style.display = "block";
+    };
+    document.getElementById("login-btn").onclick = function() {
+      document.getElementById("choose-action").style.display = "none";
+      document.getElementById("owner-login-form").style.display = "block";
+    };
+
+    // Handle new business registration
+    document.getElementById("owner-register-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const name = document.getElementById("register-business-name").value.trim();
+      const password = document.getElementById("register-owner-password").value;
+      const res = await fetch(`${API_URL}/owner-register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ business: name, password })
+      });
+      if (res.status !== 200) {
+        alert("שגיאה ביצירת עסק חדש. ייתכן שהשם כבר קיים.");
+        return;
+      }
+      ownerToken = await res.text();
+      businessName = name;
+      document.getElementById("owner-register-form").style.display = "none";
+      document.getElementById("services-section").style.display = "block";
+      document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
+      loadServices();
+    });
+
     // Handle owner login
     document.getElementById("owner-login-form").addEventListener("submit", async function(event) {
       event.preventDefault();
@@ -45,7 +90,7 @@
         alert("שם העסק או סיסמה שגויים");
         return;
       }
-      ownerToken = await res.text(); // Or res.json().token if your backend returns a token
+      ownerToken = await res.text();
       document.getElementById("owner-login-form").style.display = "none";
       document.getElementById("services-section").style.display = "block";
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
@@ -66,7 +111,6 @@
       const listDiv = document.getElementById("services-list");
       listDiv.innerHTML = "";
       services.forEach((service, idx) => {
-        // If service is an object, use service_name, otherwise use value
         const name = typeof service === "object" ? service.service_name : service;
         const div = document.createElement("div");
         div.innerHTML = `
