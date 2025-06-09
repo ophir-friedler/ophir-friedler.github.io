@@ -121,9 +121,15 @@
       listDiv.innerHTML = "";
       services.forEach((service, idx) => {
         const name = typeof service === "object" ? service.service_name : service;
+        const details = typeof service === "object" ? service.details || "" : "";
+        // Try to extract time from details if present
+        let time = "";
+        const match = details.match(/(\d+)\s*דקות/);
+        if (match) time = match[1];
         const div = document.createElement("div");
         div.innerHTML = `
-          <input type="text" value="${name}" data-idx="${idx}" class="service-input">
+          <input type="text" value="${name}" data-idx="${idx}" class="service-input" placeholder="שם שירות">
+          <input type="number" min="1" value="${time}" class="time-input" placeholder="משך (דקות)">
           <button type="button" onclick="this.parentElement.remove()">מחק</button>
         `;
         listDiv.appendChild(div);
@@ -134,7 +140,12 @@
     document.getElementById("add-service").onclick = function() {
       const newService = document.getElementById("new-service").value.trim();
       if (newService) {
-        renderServices([...Array.from(document.querySelectorAll('.service-input')).map(i => i.value), newService]);
+        // Add with empty time
+        const currentServices = Array.from(document.querySelectorAll('.service-input')).map((i, idx) => ({
+          service_name: i.value,
+          details: document.querySelectorAll('.time-input')[idx].value ? `${document.querySelectorAll('.time-input')[idx].value} דקות` : ""
+        }));
+        renderServices([...currentServices, { service_name: newService, details: "" }]);
         document.getElementById("new-service").value = "";
       }
     };
@@ -142,8 +153,11 @@
     // Save services to backend
     document.getElementById("services-form").addEventListener("submit", async function(event) {
       event.preventDefault();
-      const services = Array.from(document.querySelectorAll('.service-input')).map(i => ({
-        service_name: i.value.trim()
+      const serviceInputs = document.querySelectorAll('.service-input');
+      const timeInputs = document.querySelectorAll('.time-input');
+      const services = Array.from(serviceInputs).map((input, idx) => ({
+        service_name: input.value.trim(),
+        details: timeInputs[idx].value ? `${timeInputs[idx].value} דקות` : ""
       })).filter(s => s.service_name);
       const res = await fetch(`${API_URL}/services?business=${encodeURIComponent(businessName)}`, {
         method: "POST",
