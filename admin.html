@@ -1,49 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="he" dir="rtl">
 <head>
-  <link rel="stylesheet" href="assets/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin</title>
+  <meta charset="UTF-8">
+  <title>מנהל - צפייה בתורים</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>דף מנהל</h1>
+
+    <form id="admin-form">
+      <label for="password">סיסמת מנהל:</label>
+      <input type="password" id="password" required>
+      <button type="submit">התחברות</button>
+    </form>
+
+    <section id="data-section" style="display: none;">
+      <h2>רשימת תורים</h2>
+      <ul id="submissions"></ul>
+    </section>
+  </div>
+
   <script>
     const API_URL = "https://flask-supabase-backend.onrender.com";
+
     async function login(event) {
       event.preventDefault();
       const password = document.getElementById("password").value;
-      // Send password as a query parameter in GET request
+
       const res = await fetch(`${API_URL}/admin?password=${encodeURIComponent(password)}`);
 
       if (res.status === 403) {
-        alert("Wrong password");
+        alert("סיסמה שגויה");
         return;
       }
 
       const data = await res.json();
-      
       const list = document.getElementById("submissions");
       list.innerHTML = "";
+
       data.forEach(item => {
         const li = document.createElement("li");
-        const timeDisplay = item.selected_time ? item.selected_time : "N/A";
-        li.textContent = `${item.created_at}: ${item.content} | Time: ${timeDisplay}`;
-
+        const timeText = item.selected_time ? ` | זמן: ${new Date(item.selected_time).toLocaleString('he-IL')}` : '';
+        li.textContent = `${new Date(item.created_at).toLocaleString('he-IL')}: ${item.content}${timeText}`;
         list.appendChild(li);
       });
 
       document.getElementById("admin-form").style.display = "none";
       document.getElementById("data-section").style.display = "block";
     }
-  </script>
-</head>
-<body>
-  <h1>Admin Page</h1>
-  <form id="admin-form" onsubmit="login(event)">
-    <input type="password" id="password" required placeholder="Admin Password">
-    <button type="submit">Login</button>
-  </form>
 
-  <div id="data-section" style="display: none;">
-    <h2>Submissions</h2>
-    <ul id="submissions"></ul>
-  </div>
+    document.getElementById("admin-form").addEventListener("submit", login);
+  </script>
 </body>
 </html>
