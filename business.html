@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>קביעת תור לעסק</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/style.css?v=2">
+</head>
+<body>
+  <div class="container">
+    <h1 id="business-title">קביעת תור</h1>
+    <form id="appointment-form">
+      <label for="user_input">מספר נייד:</label>
+      <input type="text" id="user_input" name="user_input" required placeholder="נא להזין מספר נייד" pattern="[\d+]+" title="נא להזין רק ספרות ו-+">
+      <button type="submit">בחירת טיפול</button>
+    </form>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const API_URL = "https://flask-supabase-backend.onrender.com";
+    // Get business name from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const businessName = urlParams.get("name");
+
+    // Optionally, fetch and display business info
+    if (businessName) {
+      document.getElementById("business-title").textContent = `קביעת תור ל${businessName}`;
+      // You can fetch business info/services here if needed
+    }
+
+    document.getElementById("user_input").addEventListener("input", function (e) {
+      this.value = this.value.replace(/[^\d+]/g, '');
+    });
+
+    document.getElementById("appointment-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      localStorage.setItem("user_input", document.getElementById("user_input").value);
+      localStorage.setItem("business_name", businessName);
+      window.location.href = `services.html?name=${encodeURIComponent(businessName)}`;
+    });
+  </script>
+</body>
+</html>
