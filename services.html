@@ -20,6 +20,12 @@
     <p id="status"></p>
   </div>
   <script>
+    // Get business name from URL or localStorage
+    let businessName = new URLSearchParams(window.location.search).get("business_name") || localStorage.getItem("business_name");
+    if (businessName) {
+      localStorage.setItem("business_name", businessName);
+    }
+
     document.getElementById("services-form").addEventListener("submit", function(event) {
       event.preventDefault();
       const selected = Array.from(document.querySelectorAll('input[name="service"]:checked')).map(cb => cb.value);
@@ -29,8 +35,8 @@
       }
       // Save selected services to localStorage for the next page
       localStorage.setItem("selected_services", JSON.stringify(selected));
-      // Redirect to the date selection page
-      window.location.href = "date.html";
+      // Redirect to the date selection page, passing business name in URL
+      window.location.href = `date.html?business_name=${encodeURIComponent(businessName)}`;
     });
   </script>
 </body>
