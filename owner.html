@@ -64,6 +64,10 @@
     let ownerToken = null;
     let businessName = "";
 
+    // On page load:
+    ownerToken = localStorage.getItem("ownerToken");
+    businessName = localStorage.getItem("businessName");
+
     // Show register or login form
     document.getElementById("new-business-btn").onclick = function() {
       document.getElementById("choose-action").style.display = "none";
@@ -113,6 +117,10 @@
       document.getElementById("owner-greeting").after(ownerUrlDiv);
       loadServices();
       loadSubmissions();
+
+      // Save to localStorage
+      localStorage.setItem("ownerToken", ownerToken);
+      localStorage.setItem("businessName", businessName);
     });
 
     // Handle owner login
@@ -140,6 +148,10 @@
       document.getElementById("owner-greeting").after(ownerUrlDiv);
       loadServices();
       loadSubmissions();
+
+      // Save to localStorage
+      localStorage.setItem("ownerToken", ownerToken);
+      localStorage.setItem("businessName", businessName);
     });
 
     // Load current services from backend
