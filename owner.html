@@ -157,7 +157,9 @@
       const timeInputs = document.querySelectorAll('.time-input');
       const services = Array.from(serviceInputs).map((input, idx) => ({
         service_name: input.value.trim(),
-        details: timeInputs[idx].value ? `${timeInputs[idx].value} דקות` : ""
+        details: JSON.stringify({
+          time: timeInputs[idx].value ? `${timeInputs[idx].value} דקות` : ""
+        })
       })).filter(s => s.service_name);
       const res = await fetch(`${API_URL}/services?business=${encodeURIComponent(businessName)}`, {
         method: "POST",
