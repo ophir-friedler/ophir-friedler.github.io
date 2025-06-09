@@ -8,6 +8,10 @@
 </head>
 <body>
   <div class="container">
+    <div id="user-submissions-section" style="display:none;">
+      <h3>ההזמנות הקודמות שלך</h3>
+      <div id="user-submissions-list"></div>
+    </div>
     <h1>בחר שירותים</h1>
     <form id="services-form">
       <label><input type="checkbox" name="service" value="תספורת"> תספורת</label><br>
@@ -18,10 +22,6 @@
       <button type="submit">בחירת תאריך</button>
     </form>
     <p id="status"></p>
-  </div>
-  <div id="user-submissions-section" style="display:none;">
-    <h3>ההזמנות הקודמות שלך</h3>
-    <div id="user-submissions-list"></div>
   </div>
   <script>
     const API_URL = "https://flask-supabase-backend.onrender.com";
