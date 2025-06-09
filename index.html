@@ -12,11 +12,7 @@
     <form id="appointment-form">
       <label for="user_input">מספר נייד:</label>
       <input type="text" id="user_input" name="user_input" required placeholder="נא להזין מספר נייד" pattern="[\d+]+" title="נא להזין רק ספרות ו-+">
-
-      <label for="selected_time">בחר זמן:</label>
-      <input type="datetime-local" id="selected_time" name="selected_time" required>
-
-      <button type="submit">קביעת תור</button>
+      <button type="submit">בחירת טיפול</button>
     </form>
     <p id="status"></p>
   </div>
@@ -31,9 +27,8 @@
 
     document.getElementById("appointment-form").addEventListener("submit", function(event) {
       event.preventDefault();
-      // Optionally, you can store the input in localStorage to use on the next page
+      // Store the input in localStorage to use on the next page
       localStorage.setItem("user_input", document.getElementById("user_input").value);
-      localStorage.setItem("selected_time", document.getElementById("selected_time").value);
       // Redirect to the multi-selection page
       window.location.href = "services.html";
     });

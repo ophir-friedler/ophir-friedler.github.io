@@ -15,7 +15,7 @@
       <label><input type="checkbox" name="service" value="פן"> פן</label><br>
       <label><input type="checkbox" name="service" value="החלקה"> החלקה</label><br>
       <label><input type="checkbox" name="service" value="תספורת ילדים"> תספורת ילדים</label><br>
-      <button type="submit">המשך</button>
+      <button type="submit">בחירת תאריך</button>
     </form>
     <p id="status"></p>
   </div>
@@ -27,10 +27,10 @@
         document.getElementById("status").textContent = "נא לבחור לפחות שירות אחד.";
         return;
       }
-      // You can now send the selected services along with the previous data to your backend
-      // Example: localStorage.getItem("user_input"), localStorage.getItem("selected_time"), selected
-      document.getElementById("status").textContent = "השירותים נבחרו: " + selected.join(", ");
-      // Here you can continue to the next step or send the data to your backend
+      // Save selected services to localStorage for the next page
+      localStorage.setItem("selected_services", JSON.stringify(selected));
+      // Redirect to the date selection page
+      window.location.href = "date.html";
     });
   </script>
 </body>

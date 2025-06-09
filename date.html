@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>בחירת תאריך ושעה</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/style.css?v=2">
+</head>
+<body>
+  <div class="container">
+    <h1>בחר תאריך ושעה</h1>
+    <form id="date-form">
+      <label for="selected_time">תאריך ושעה:</label>
+      <input type="datetime-local" id="selected_time" name="selected_time" required>
+      <button type="submit">אישור</button>
+    </form>
+    <p id="status"></p>
+  </div>
+  <script>
+    const API_URL = "https://flask-supabase-backend.onrender.com";
+
+    document.getElementById("date-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const selectedTime = document.getElementById("selected_time").value;
+      if (!selectedTime) {
+        document.getElementById("status").textContent = "נא לבחור תאריך ושעה.";
+        return;
+      }
+      // Gather all data from localStorage
+      const user_input = localStorage.getItem("user_input");
+      const selected_services = JSON.parse(localStorage.getItem("selected_services") || "[]");
+      // Save selected time
+      localStorage.setItem("selected_time", selectedTime);
+
+      // Send data to backend
+      try {
+        const res = await fetch(`${API_URL}/submit`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            content: {
+              user_input,
+              selected_services,
+              selected_time: selectedTime
+            }
+          })
+        });
+        if (res.ok) {
+          document.getElementById("status").textContent = "התור שלך נקבע בהצלחה!";
+          // Optionally clear localStorage or redirect to a confirmation page
+          localStorage.removeItem("user_input");
+          localStorage.removeItem("selected_services");
+          localStorage.removeItem("selected_time");
+        } else {
+          document.getElementById("status").textContent = "שגיאה בשליחת הנתונים. נסה שוב.";
+        }
+      } catch (e) {
+        document.getElementById("status").textContent = "שגיאה בחיבור לשרת.";
+      }
+    });
+  </script>
+</body>
+</html>
