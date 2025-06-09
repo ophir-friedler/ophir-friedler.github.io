@@ -230,12 +230,23 @@
       }
       console.log("submissions:", submissions);
       submissions.forEach(sub => {
+        let content = sub.content;
+        if (typeof content === "string") {
+          try {
+            content = JSON.parse(content);
+          } catch (e) {
+            content = {};
+          }
+        }
+        if (!content || (!content.user_input && (!content.selected_services || !content.selected_services.length) && !content.selected_time)) {
+          return;
+        }
         const div = document.createElement("div");
         div.className = "submission-item";
         div.innerHTML = `
-          <strong>טלפון:</strong> ${sub.content?.user_input || ""} <br>
-          <strong>שירותים:</strong> ${(sub.content?.selected_services || []).join(", ")} <br>
-          <strong>תאריך:</strong> ${sub.content?.selected_time || ""} <br>
+          <strong>טלפון:</strong> ${content.user_input || ""} <br>
+          <strong>שירותים:</strong> ${(content.selected_services || []).join(", ")} <br>
+          <strong>תאריך:</strong> ${content.selected_time || ""} <br>
           <hr>
         `;
         listDiv.appendChild(div);
