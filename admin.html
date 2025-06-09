@@ -41,9 +41,19 @@
       list.innerHTML = "";
 
       data.forEach(item => {
+        // Parse the JSON stored in the content column
+        let content = {};
+        try {
+          content = typeof item.content === "string" ? JSON.parse(item.content) : item.content;
+        } catch (e) {
+          content = {};
+        }
+        const services = Array.isArray(content.selected_services) ? content.selected_services.join(", ") : "";
+        const timeText = content.selected_time ? ` | זמן: ${new Date(content.selected_time).toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' })}` : '';
+        const phone = content.user_input ? `מספר נייד: ${content.user_input}` : '';
         const li = document.createElement("li");
-        const timeText = item.selected_time ? ` | זמן: ${new Date(item.selected_time).toLocaleString('he-IL')}` : '';
-        li.textContent = `${new Date(item.created_at).toLocaleString('he-IL')}: ${item.content}${timeText}`;
+        li.style.direction = "rtl";
+        li.textContent = `${phone} | שירותים: ${services}${timeText}`;
         list.appendChild(li);
       });
 
