@@ -165,7 +165,6 @@
             const detailsObj = JSON.parse(details);
             time = detailsObj.time ? detailsObj.time.replace(" דקות", "") : "";
           } catch (e) {
-            // fallback: try to extract time from plain string
             const match = details.match(/(\d+)\s*דקות/);
             if (match) time = match[1];
           }
@@ -173,7 +172,10 @@
         const div = document.createElement("div");
         div.innerHTML = `
           <input type="text" value="${name}" data-idx="${idx}" class="service-input" placeholder="שם שירות">
-          <input type="number" min="1" value="${time}" class="time-input" placeholder="משך (דקות)">
+          <label style="margin-right:8px;">
+            <span>זמן</span>
+            <input type="number" min="1" value="${time}" class="time-input" placeholder="משך (דקות)">
+          </label>
           <button type="button" onclick="this.parentElement.remove()">מחק</button>
         `;
         listDiv.appendChild(div);
