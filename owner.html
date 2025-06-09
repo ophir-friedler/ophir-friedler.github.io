@@ -81,7 +81,7 @@
         submitBtn.disabled = false;
         return;
       }
-      ownerToken = await res.text();
+      ownerToken = `Bearer ${businessName}-token`;
       businessName = name;
       document.getElementById("owner-register-form").style.display = "none";
       document.getElementById("services-section").style.display = "block";
@@ -99,7 +99,7 @@
         alert("שם העסק או סיסמה שגויים");
         return;
       }
-      ownerToken = await res.text();
+      ownerToken = `Bearer ${businessName}-token`;
       document.getElementById("owner-login-form").style.display = "none";
       document.getElementById("services-section").style.display = "block";
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
