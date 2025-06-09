@@ -228,6 +228,7 @@
         listDiv.textContent = "אין הזמנות להצגה.";
         return;
       }
+      console.log("submissions:", submissions);
       submissions.forEach(sub => {
         const div = document.createElement("div");
         div.className = "submission-item";
