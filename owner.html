@@ -199,9 +199,6 @@
     // Save services to backend
     document.getElementById("services-form").addEventListener("submit", async function(event) {
       event.preventDefault();
-      console.log("businessName:", businessName);
-      console.log("ownerToken:", ownerToken);
-      console.log("services:", services);
 
       const serviceInputs = document.querySelectorAll('.service-input');
       const timeInputs = document.querySelectorAll('.time-input');
@@ -211,6 +208,9 @@
           time: timeInputs[idx].value ? `${timeInputs[idx].value} דקות` : ""
         })
       })).filter(s => s.service_name);
+      console.log("businessName:", businessName);
+      console.log("ownerToken:", ownerToken);
+      console.log("services:", services);
       const res = await fetch(`${API_URL}/services/update`, {
         method: "POST",
         headers: {
