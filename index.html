@@ -29,23 +29,13 @@
       this.value = this.value.replace(/[^\d+]/g, '');
     });
 
-    document.getElementById("appointment-form").addEventListener("submit", async function (event) {
+    document.getElementById("appointment-form").addEventListener("submit", function(event) {
       event.preventDefault();
-      const user_input = document.getElementById("user_input").value;
-      const selected_time = document.getElementById("selected_time").value;
-
-      const res = await fetch(`${API_URL}/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_input, selected_time })
-      });
-
-      if (res.ok) {
-        document.getElementById("status").textContent = "התור נקבע בהצלחה!";
-        this.reset();
-      } else {
-        document.getElementById("status").textContent = "שגיאה בשליחת הנתונים.";
-      }
+      // Optionally, you can store the input in localStorage to use on the next page
+      localStorage.setItem("user_input", document.getElementById("user_input").value);
+      localStorage.setItem("selected_time", document.getElementById("selected_time").value);
+      // Redirect to the multi-selection page
+      window.location.href = "services.html";
     });
   </script>
 </body>

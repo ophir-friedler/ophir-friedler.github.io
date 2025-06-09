@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>בחירת שירותים</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/style.css?v=2">
+</head>
+<body>
+  <div class="container">
+    <h1>בחר שירותים</h1>
+    <form id="services-form">
+      <label><input type="checkbox" name="service" value="תספורת"> תספורת</label><br>
+      <label><input type="checkbox" name="service" value="צבע"> צבע</label><br>
+      <label><input type="checkbox" name="service" value="פן"> פן</label><br>
+      <label><input type="checkbox" name="service" value="החלקה"> החלקה</label><br>
+      <label><input type="checkbox" name="service" value="תספורת ילדים"> תספורת ילדים</label><br>
+      <button type="submit">המשך</button>
+    </form>
+    <p id="status"></p>
+  </div>
+  <script>
+    document.getElementById("services-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const selected = Array.from(document.querySelectorAll('input[name="service"]:checked')).map(cb => cb.value);
+      if (selected.length === 0) {
+        document.getElementById("status").textContent = "נא לבחור לפחות שירות אחד.";
+        return;
+      }
+      // You can now send the selected services along with the previous data to your backend
+      // Example: localStorage.getItem("user_input"), localStorage.getItem("selected_time"), selected
+      document.getElementById("status").textContent = "השירותים נבחרו: " + selected.join(", ");
+      // Here you can continue to the next step or send the data to your backend
+    });
+  </script>
+</body>
+</html>
