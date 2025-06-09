@@ -14,11 +14,7 @@
     </div>
     <h1>בחר שירותים</h1>
     <form id="services-form">
-      <label><input type="checkbox" name="service" value="תספורת"> תספורת</label><br>
-      <label><input type="checkbox" name="service" value="צבע"> צבע</label><br>
-      <label><input type="checkbox" name="service" value="פן"> פן</label><br>
-      <label><input type="checkbox" name="service" value="החלקה"> החלקה</label><br>
-      <label><input type="checkbox" name="service" value="תספורת ילדים"> תספורת ילדים</label><br>
+      <div id="services-list"></div>
       <button type="submit">בחירת תאריך</button>
     </form>
     <p id="status"></p>
@@ -79,8 +75,37 @@
       document.getElementById("user-submissions-section").style.display = "block";
     }
 
+    async function loadBusinessServices() {
+      if (!businessName) return;
+      const res = await fetch(`${API_URL}/services?business_name=${encodeURIComponent(businessName)}`);
+      if (!res.ok) {
+        document.getElementById("services-list").textContent = "שגיאה בטעינת השירותים.";
+        return;
+      }
+      const services = await res.json();
+      renderServicesList(services);
+    }
+
+    function renderServicesList(services) {
+      const listDiv = document.getElementById("services-list");
+      listDiv.innerHTML = "";
+      if (!services.length) {
+        listDiv.textContent = "לא הוגדרו שירותים לעסק זה.";
+        return;
+      }
+      services.forEach(service => {
+        // Support both string and object format
+        const name = typeof service === "object" ? service.service_name : service;
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" name="service" value="${name}"> ${name}`;
+        listDiv.appendChild(label);
+        listDiv.appendChild(document.createElement("br"));
+      });
+    }
+
     // Call this when the page loads
     loadUserSubmissions();
+    loadBusinessServices();
   </script>
 </body>
 </html>
