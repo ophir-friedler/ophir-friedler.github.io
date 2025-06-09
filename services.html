@@ -78,6 +78,7 @@
     async function loadBusinessServices() {
       if (!businessName) return;
       try {
+        console.log("businessName:", businessName);
         const res = await fetch(`${API_URL}/services?business_name=${encodeURIComponent(businessName)}`);
         if (!res.ok) {
           document.getElementById("services-list").textContent = `שגיאה בטעינת השירותים. קוד: ${res.status}`;
