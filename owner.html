@@ -61,6 +61,9 @@
     // Handle new business registration
     document.getElementById("owner-register-form").addEventListener("submit", async function(event) {
       event.preventDefault();
+      const submitBtn = this.querySelector('button[type="submit"]');
+      submitBtn.disabled = true; // Disable button to prevent double submit
+
       const name = document.getElementById("register-business-name").value.trim();
       const password = document.getElementById("register-owner-password").value;
       const res = await fetch(`${API_URL}/owner-register`, {
@@ -70,6 +73,7 @@
       });
       if (res.status !== 200) {
         alert("שגיאה ביצירת עסק חדש. ייתכן שהשם כבר קיים.");
+        submitBtn.disabled = false; // Re-enable if failed
         return;
       }
       ownerToken = await res.text();
