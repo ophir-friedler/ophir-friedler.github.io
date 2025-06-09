@@ -105,8 +105,8 @@
         return;
       }
       services.forEach(service => {
-        // Support both string and object format
-        const name = typeof service === "object" ? service.service_name : service;
+        const name = service.service_name; // Always use the object property
+        if (!name) return; // skip if missing
         const label = document.createElement("label");
         label.innerHTML = `<input type="checkbox" name="service" value="${name}"> ${name}`;
         listDiv.appendChild(label);
