@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>הגדרות בעל העסק</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/style.css?v=2">
+</head>
+<body>
+  <div class="container">
+    <h1>הגדרות שירותים</h1>
+    <form id="owner-login-form">
+      <label for="business-name">שם העסק:</label>
+      <input type="text" id="business-name" required>
+      <label for="owner-password">סיסמת בעל העסק:</label>
+      <input type="password" id="owner-password" required>
+      <button type="submit">התחברות</button>
+    </form>
+
+    <section id="services-section" style="display: none;">
+      <h2 id="owner-greeting"></h2>
+      <h3>עריכת שירותים</h3>
+      <form id="services-form">
+        <div id="services-list"></div>
+        <input type="text" id="new-service" placeholder="הוסף שירות חדש">
+        <button type="button" id="add-service">הוסף שירות</button>
+        <br><br>
+        <button type="submit">שמור שינויים</button>
+      </form>
+      <p id="save-status"></p>
+    </section>
+  </div>
+  <script>
+    const API_URL = "https://flask-supabase-backend.onrender.com";
+    let ownerToken = null;
+    let businessName = "";
+
+    // Handle owner login
+    document.getElementById("owner-login-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      businessName = document.getElementById("business-name").value.trim();
+      const password = document.getElementById("owner-password").value;
+      const res = await fetch(`${API_URL}/owner-login?business=${encodeURIComponent(businessName)}&password=${encodeURIComponent(password)}`);
+      if (res.status !== 200) {
+        alert("שם העסק או סיסמה שגויים");
+        return;
+      }
+      ownerToken = await res.text(); // Or res.json().token if your backend returns a token
+      document.getElementById("owner-login-form").style.display = "none";
+      document.getElementById("services-section").style.display = "block";
+      document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
+      loadServices();
+    });
+
+    // Load current services from backend
+    async function loadServices() {
+      const res = await fetch(`${API_URL}/services?business=${encodeURIComponent(businessName)}`, {
+        headers: { "Authorization": ownerToken }
+      });
+      const services = await res.json();
+      renderServices(services);
+    }
+
+    // Render services as editable list
+    function renderServices(services) {
+      const listDiv = document.getElementById("services-list");
+      listDiv.innerHTML = "";
+      services.forEach((service, idx) => {
+        // If service is an object, use service_name, otherwise use value
+        const name = typeof service === "object" ? service.service_name : service;
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <input type="text" value="${name}" data-idx="${idx}" class="service-input">
+          <button type="button" onclick="this.parentElement.remove()">מחק</button>
+        `;
+        listDiv.appendChild(div);
+      });
+    }
+
+    // Add new service
+    document.getElementById("add-service").onclick = function() {
+      const newService = document.getElementById("new-service").value.trim();
+      if (newService) {
+        renderServices([...Array.from(document.querySelectorAll('.service-input')).map(i => i.value), newService]);
+        document.getElementById("new-service").value = "";
+      }
+    };
+
+    // Save services to backend
+    document.getElementById("services-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const services = Array.from(document.querySelectorAll('.service-input')).map(i => ({
+        service_name: i.value.trim()
+      })).filter(s => s.service_name);
+      const res = await fetch(`${API_URL}/services?business=${encodeURIComponent(businessName)}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": ownerToken
+        },
+        body: JSON.stringify({ services })
+      });
+      document.getElementById("save-status").textContent = res.ok ? "השירותים נשמרו בהצלחה!" : "שגיאה בשמירה.";
+    });
+  </script>
+</body>
+</html>
