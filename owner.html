@@ -199,6 +199,10 @@
     // Save services to backend
     document.getElementById("services-form").addEventListener("submit", async function(event) {
       event.preventDefault();
+      console.log("businessName:", businessName);
+      console.log("ownerToken:", ownerToken);
+      console.log("services:", services);
+
       const serviceInputs = document.querySelectorAll('.service-input');
       const timeInputs = document.querySelectorAll('.time-input');
       const services = Array.from(serviceInputs).map((input, idx) => ({
