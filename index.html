@@ -11,7 +11,7 @@
     <h1>קביעת תור</h1>
     <form id="appointment-form">
       <label for="user_input">מספר נייד:</label>
-      <input type="text" id="user_input" name="user_input" required placeholder="נא להזין מספר נייד">
+      <input type="text" id="user_input" name="user_input" required placeholder="נא להזין מספר נייד" pattern="[\d+]+" title="נא להזין רק ספרות ו-+">
 
       <label for="selected_time">בחר זמן:</label>
       <input type="datetime-local" id="selected_time" name="selected_time" required>
@@ -23,6 +23,11 @@
 
   <script>
     const API_URL = "https://flask-supabase-backend.onrender.com";
+
+    // Allow only digits and + in the input box as the user types
+    document.getElementById("user_input").addEventListener("input", function (e) {
+      this.value = this.value.replace(/[^\d+]/g, '');
+    });
 
     document.getElementById("appointment-form").addEventListener("submit", async function (event) {
       event.preventDefault();
