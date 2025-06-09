@@ -77,20 +77,28 @@
 
     async function loadBusinessServices() {
       if (!businessName) return;
-      const res = await fetch(`${API_URL}/services?business_name=${encodeURIComponent(businessName)}`, {
-        headers: { "Authorization": ownerToken }
-      });
-      if (!res.ok) {
-        document.getElementById("services-list").textContent = "שגיאה בטעינת השירותים.";
-        return;
+      try {
+        const res = await fetch(`${API_URL}/services?business_name=${encodeURIComponent(businessName)}`);
+        if (!res.ok) {
+          document.getElementById("services-list").textContent = `שגיאה בטעינת השירותים. קוד: ${res.status}`;
+          return;
+        }
+        const services = await res.json();
+        console.log("Services returned from backend:", services);
+        renderServicesList(services);
+      } catch (e) {
+        document.getElementById("services-list").textContent = "שגיאה כללית בטעינת השירותים.";
+        console.error("Error fetching services:", e);
       }
-      const services = await res.json();
-      renderServicesList(services);
     }
 
     function renderServicesList(services) {
       const listDiv = document.getElementById("services-list");
       listDiv.innerHTML = "";
+      if (!Array.isArray(services)) {
+        listDiv.textContent = "הפורמט שהתקבל מהשרת אינו רשימה: " + JSON.stringify(services);
+        return;
+      }
       if (!services.length) {
         listDiv.textContent = "לא הוגדרו שירותים לעסק זה.";
         return;
