@@ -157,11 +157,19 @@
       listDiv.innerHTML = "";
       services.forEach((service, idx) => {
         const name = typeof service === "object" ? service.service_name : service;
-        const details = typeof service === "object" ? service.details || "" : "";
-        // Try to extract time from details if present
+        let details = typeof service === "object" ? service.details || "" : "";
+        // Parse details if it's a JSON string
         let time = "";
-        const match = details.match(/(\d+)\s*דקות/);
-        if (match) time = match[1];
+        if (details) {
+          try {
+            const detailsObj = JSON.parse(details);
+            time = detailsObj.time ? detailsObj.time.replace(" דקות", "") : "";
+          } catch (e) {
+            // fallback: try to extract time from plain string
+            const match = details.match(/(\d+)\s*דקות/);
+            if (match) time = match[1];
+          }
+        }
         const div = document.createElement("div");
         div.innerHTML = `
           <input type="text" value="${name}" data-idx="${idx}" class="service-input" placeholder="שם שירות">
