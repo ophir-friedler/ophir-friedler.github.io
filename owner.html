@@ -197,13 +197,16 @@
           time: timeInputs[idx].value ? `${timeInputs[idx].value} דקות` : ""
         })
       })).filter(s => s.service_name);
-      const res = await fetch(`${API_URL}/services?business_name=${encodeURIComponent(businessName)}`, {
+      const res = await fetch(`${API_URL}/services/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": ownerToken
         },
-        body: JSON.stringify({ services })
+        body: JSON.stringify({
+          business_name: businessName,
+          services
+        })
       });
       document.getElementById("save-status").textContent = res.ok ? "השירותים נשמרו בהצלחה!" : "שגיאה בשמירה.";
     });
