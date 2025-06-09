@@ -91,6 +91,15 @@
       document.getElementById("owner-register-form").style.display = "none";
       document.getElementById("services-section").style.display = "block";
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
+      const ownerUrlDiv = document.createElement("div");
+      ownerUrlDiv.style.margin = "10px 0";
+      ownerUrlDiv.innerHTML = `
+        <span>קישור לעמוד העסק שלך:</span>
+        <a href="business.html?business_name=${encodeURIComponent(businessName)}" target="_blank">
+          business.html?business_name=${encodeURIComponent(businessName)}
+        </a>
+      `;
+      document.getElementById("owner-greeting").after(ownerUrlDiv);
       loadServices();
       loadSubmissions();
     });
@@ -109,6 +118,15 @@
       document.getElementById("owner-login-form").style.display = "none";
       document.getElementById("services-section").style.display = "block";
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
+      const ownerUrlDiv = document.createElement("div");
+      ownerUrlDiv.style.margin = "10px 0";
+      ownerUrlDiv.innerHTML = `
+        <span>קישור לעמוד העסק שלך:</span>
+        <a href="business.html?business_name=${encodeURIComponent(businessName)}" target="_blank">
+          business.html?business_name=${encodeURIComponent(businessName)}
+        </a>
+      `;
+      document.getElementById("owner-greeting").after(ownerUrlDiv);
       loadServices();
       loadSubmissions();
     });
