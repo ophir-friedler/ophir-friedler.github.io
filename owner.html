@@ -71,9 +71,14 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ business: name, password })
       });
-      if (res.status !== 200) {
-        alert("שגיאה ביצירת עסק חדש. ייתכן שהשם כבר קיים.");
-        submitBtn.disabled = false; // Re-enable if failed
+      if (res.status === 409) {
+        alert("העסק כבר קיים. נסה להתחבר במקום זאת.");
+        submitBtn.disabled = false;
+        return;
+      }
+      if (res.status !== 200 && res.status !== 201) {
+        alert("שגיאה ביצירת עסק חדש.");
+        submitBtn.disabled = false;
         return;
       }
       ownerToken = await res.text();
