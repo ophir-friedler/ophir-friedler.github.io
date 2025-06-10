@@ -108,10 +108,24 @@
         return;
       }
       services.forEach(service => {
-        const name = service.service_name; // Always use the object property
-        if (!name) return; // skip if missing
+        const name = service.service_name;
+        let time = "";
+        // Try to extract time from details
+        if (service.details) {
+          try {
+            const detailsObj = typeof service.details === "string" ? JSON.parse(service.details) : service.details;
+            time = detailsObj.time || "";
+          } catch (e) {
+            // fallback: try to extract with regex
+            const match = service.details.match(/(\d+)\s*דקות/);
+            if (match) time = match[0];
+          }
+        }
         const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" name="service" value="${name}"> ${name}`;
+        label.innerHTML = `
+          <input type="checkbox" name="service" value="${name}"> 
+          ${name}${time ? ` <span style="color:gray;font-size:0.9em;">(${time})</span>` : ""}
+        `;
         listDiv.appendChild(label);
         listDiv.appendChild(document.createElement("br"));
       });
