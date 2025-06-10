@@ -186,6 +186,7 @@
           }
         }
         const div = document.createElement("div");
+        div.className = "service-row";
         div.innerHTML = `
           <input type="text" value="${name}" data-idx="${idx}" class="service-input" placeholder="שם שירות">
           <label style="margin-right:8px;">
@@ -279,7 +280,7 @@
         div.innerHTML = `
           <strong>טלפון:</strong> ${content.user_input || ""} <br>
           <strong>שירותים:</strong> ${(content.selected_services || []).join(", ")} <br>
-          <strong>תאריך:</strong> ${content.selected_time || ""} <br>
+          <strong>תאריך:</strong> ${(content.selected_time || "").replace("T", "   ")} <br>
           <hr>
         `;
         listDiv.appendChild(div);

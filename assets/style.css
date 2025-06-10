@@ -69,3 +69,13 @@ button:hover {
   font-weight: bold;
   color: green;
 }
+
+.service-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.service-row button {
+  margin-left: 10px;
+}
