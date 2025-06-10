@@ -313,9 +313,20 @@
       });
       if (res.ok) {
         const details = await res.json();
-        // details.details is the JSONB object
-        document.getElementById("business-whatsapp").textContent = `מספר ווטסאפ של העסק: ${details.details?.whatsapp || "לא הוגדר"}`;
-        document.getElementById("whatsapp-input").value = details.details?.whatsapp || "";
+        // Parse details.details as JSON if it's a string
+        let detailsObj = {};
+        if (typeof details.details === "string") {
+          try {
+            detailsObj = JSON.parse(details.details);
+          } catch {
+            detailsObj = {};
+          }
+        } else {
+          detailsObj = details.details || {};
+        }
+        document.getElementById("business-whatsapp").textContent =
+          `מספר ווטסאפ של העסק: ${detailsObj.whatsapp || "לא הוגדר"}`;
+        document.getElementById("whatsapp-input").value = detailsObj.whatsapp || "";
       }
     }
 
@@ -343,7 +354,7 @@
         statusSpan.textContent = "שגיאה בשמירה";
         statusSpan.style.color = "red";
       }
-      if (statusSpan.textContent !== "שגיאה בשמירה") {
+      if (statusSpan.textContent !== "שגיאה בששמירה") {
         setTimeout(() => { statusSpan.textContent = ""; statusSpan.style.color = "green"; }, 2000);
       }
     });
