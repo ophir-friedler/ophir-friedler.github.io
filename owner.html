@@ -384,6 +384,11 @@
       localStorage.setItem("ownerToken", token);
       localStorage.setItem("businessName", name);
     }
+
+    function clearOwnerSession() {
+      localStorage.removeItem("ownerToken");
+      localStorage.removeItem("businessName");
+    }
   </script>
 </body>
 </html>
