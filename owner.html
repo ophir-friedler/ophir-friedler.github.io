@@ -113,21 +113,7 @@
       businessName = name;
       ownerToken = `Bearer ${businessName}-token`;
       document.getElementById("owner-register-form").style.display = "none";
-      showServicesSection();
-      document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
-      const ownerUrlDiv = document.createElement("div");
-      ownerUrlDiv.className = "owner-url-link";
-      ownerUrlDiv.style.margin = "10px 0";
-      ownerUrlDiv.innerHTML = `
-        <span>קישור לעמוד העסק שלך:</span>
-        <a href="business.html?business_name=${encodeURIComponent(businessName)}" target="_blank">
-          business.html?business_name=${encodeURIComponent(businessName)}
-        </a>
-      `;
-      document.getElementById("owner-greeting").after(ownerUrlDiv);
-      loadServices();
-      loadSubmissions();
-      loadBusinessDetails();
+      afterOwnerLoginOrRegister();
 
       // Save to localStorage
       localStorage.setItem("ownerToken", ownerToken);
@@ -147,7 +133,14 @@
       }
       ownerToken = `Bearer ${businessName}-token`;
       document.getElementById("owner-login-form").style.display = "none";
-      showServicesSection();
+      afterOwnerLoginOrRegister();
+
+      // Save to localStorage
+      localStorage.setItem("ownerToken", ownerToken);
+      localStorage.setItem("businessName", businessName);
+    });
+
+    function afterOwnerLoginOrRegister() {
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
       const ownerUrlDiv = document.createElement("div");
       ownerUrlDiv.className = "owner-url-link";
@@ -159,14 +152,13 @@
         </a>
       `;
       document.getElementById("owner-greeting").after(ownerUrlDiv);
+      showServicesSection();
       loadServices();
       loadSubmissions();
       loadBusinessDetails();
-
-      // Save to localStorage
       localStorage.setItem("ownerToken", ownerToken);
       localStorage.setItem("businessName", businessName);
-    });
+    }
 
     // Load current services from backend
     async function loadServices() {
