@@ -95,12 +95,12 @@
       const submitBtn = this.querySelector('button[type="submit"]');
       submitBtn.disabled = true; // Disable button to prevent double submit
 
-      const name = document.getElementById("register-business-name").value.trim();
+      businessName = document.getElementById("register-business-name").value.trim();
       const password = document.getElementById("register-owner-password").value;
       const res = await fetch(`${API_URL}/owner-register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ business: name, password })
+        body: JSON.stringify({ business: businessName, password })
       });
       if (res.status === 409) {
         alert("העסק כבר קיים. נסה להתחבר במקום זאת.");
@@ -113,7 +113,6 @@
         return;
       }
       const data = await res.json();
-      businessName = name;
       ownerToken = `Bearer ${data.token}`; // Use the real token from backend!
       document.getElementById("owner-register-form").style.display = "none";
       afterOwnerLoginOrRegister();
@@ -301,25 +300,8 @@
     }
 
     async function loadBusinessDetails() {
-      const res = await fetch(`${API_URL}/business-details?business_name=${encodeURIComponent(businessName)}`, {
-        headers: { "Authorization": ownerToken }
-      });
-      if (res.ok) {
-        const details = await res.json();
-        console.log("Backend details response:", details);
-        let business_detailsObj = {};
-        if (typeof details.business_details === "string") {
-          try {
-            business_detailsObj = JSON.parse(details.business_details);
-          } catch {
-            business_detailsObj = {};
-          }
-        } else {
-          business_detailsObj = details.business_details || {};
-        }
-        console.log("Parsed business_detailsObj:", business_detailsObj);
-        document.getElementById("whatsapp-input").value = business_detailsObj.whatsapp || "";
-      }
+      const business_detailsObj = await fetchBusinessDetails();
+      document.getElementById("whatsapp-input").value = business_detailsObj.whatsapp || "";
     }
 
     document.getElementById("whatsapp-form").addEventListener("submit", async function(event) {
@@ -328,28 +310,9 @@
       const statusSpan = document.getElementById("whatsapp-save-status");
       statusSpan.textContent = "";
 
-      // Fetch current business_details first
-      let business_detailsObj = {};
-      try {
-        const res = await fetch(`${API_URL}/business-details?business_name=${encodeURIComponent(businessName)}`, {
-          headers: { "Authorization": ownerToken }
-        });
-        if (res.ok) {
-          const details = await res.json();
-          if (typeof details.business_details === "string") {
-            business_detailsObj = JSON.parse(details.business_details);
-          } else {
-            business_detailsObj = details.business_details || {};
-          }
-        }
-      } catch (e) {
-        business_detailsObj = {};
-      }
-
-      // Update whatsapp in business_details
+      let business_detailsObj = await fetchBusinessDetails();
       business_detailsObj.whatsapp = whatsapp;
 
-      // Save updated business_details
       const res2 = await fetch(`${API_URL}/business-details/update`, {
         method: "POST",
         headers: {
@@ -378,36 +341,27 @@
     const backBtn = document.getElementById("back-btn");
 
     backBtn.onclick = function() {
-      // Hide all owner-related sections
-      document.getElementById("services-section").style.display = "none";
-      document.getElementById("submissions-section").style.display = "none";
-      document.getElementById("business-whatsapp-edit").style.display = "none";
-      document.getElementById("owner-register-form").style.display = "none"; // Hide registration form
-      document.getElementById("owner-login-form").style.display = "none"; // Hide login form
+      ["services-section", "submissions-section", "business-whatsapp-edit", "owner-register-form", "owner-login-form"].forEach(id => {
+        document.getElementById(id).style.display = "none";
+      });
       document.getElementById("choose-action").style.display = "block";
       backBtn.style.display = "none";
-
-      // Clear login and register form fields
-      document.getElementById("business-name").value = "";
-      document.getElementById("owner-password").value = "";
-      document.getElementById("register-business-name").value = "";
-      document.getElementById("register-owner-password").value = "";
-
-      // Clear owner greeting
+      clearForms();
       document.getElementById("owner-greeting").textContent = "";
-
-      // Remove all owner URL links
       document.querySelectorAll('.owner-url-link').forEach(el => el.remove());
-
-      // Clear הזמנות אחרונות
       document.getElementById("submissions-list").innerHTML = "";
-
-      // Clear business details from variables and localStorage
       ownerToken = null;
       businessName = "";
       localStorage.removeItem("ownerToken");
       localStorage.removeItem("businessName");
     };
+
+    function clearForms() {
+      ["business-name", "owner-password", "register-business-name", "register-owner-password"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+    }
 
     // Show the back button when showing the services section
     function showServicesSection() {
@@ -415,6 +369,18 @@
       document.getElementById("choose-action").style.display = "none";
       backBtn.style.display = "inline-block";
       document.getElementById("business-whatsapp-edit").style.display = "block";
+    }
+
+    async function fetchBusinessDetails() {
+      const res = await fetch(`${API_URL}/business-details?business_name=${encodeURIComponent(businessName)}`, {
+        headers: { "Authorization": ownerToken }
+      });
+      if (!res.ok) return {};
+      const details = await res.json();
+      if (typeof details.business_details === "string") {
+        try { return JSON.parse(details.business_details); } catch { return {}; }
+      }
+      return details.business_details || {};
     }
   </script>
 </body>
