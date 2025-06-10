@@ -122,6 +122,10 @@
     loadBusinessServices();
 
     document.getElementById("back-btn").onclick = function() {
+      // Clear the phone number field if it exists
+      const phoneInput = document.getElementById("user_input");
+      if (phoneInput) phoneInput.value = "";
+      localStorage.removeItem("user_input");
       window.history.back();
     };
   </script>
