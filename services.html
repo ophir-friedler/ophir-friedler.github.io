@@ -8,6 +8,9 @@
 </head>
 <body>
   <div class="container">
+    <button id="back-btn" style="background:none;border:none;cursor:pointer;font-size:2em;vertical-align:middle;" title="חזור">
+      &#8592;
+    </button>
     <div id="user-submissions-section" style="display:none;">
       <h3>ההזמנות הקודמות שלך</h3>
       <div id="user-submissions-list"></div>
@@ -117,6 +120,11 @@
     // Call this when the page loads
     loadUserSubmissions();
     loadBusinessServices();
+
+    document.getElementById("back-btn").onclick = function() {
+      // Go back to the previous page in browser history
+      window.history.back();
+    };
   </script>
 </body>
 </html>
