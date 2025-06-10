@@ -72,12 +72,32 @@ button:hover {
 
 .service-row {
   display: flex;
-  align-items: center;
-  margin-bottom: 8px;
+  align-items: stretch;
+  margin-bottom: 12px;
 }
 
 .service-row button {
   margin-left: 10px;
+}
+
+.delete-btn {
+  align-self: stretch;
+  height: auto;
+  aspect-ratio: 1/1;
+  min-width: 36px;
+  max-width: 48px;
+  background: magenta;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-right: 24px; /* space between button and details */
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #c8007e;
 }
 
 .back-arrow-btn {
