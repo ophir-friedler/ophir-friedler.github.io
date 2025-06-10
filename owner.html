@@ -20,6 +20,16 @@
 <body>
   <div class="container">
     <button id="back-btn" class="back-arrow-btn" style="display:none;" title="חזור">&#8592;</button>
+    <h2 id="owner-greeting"></h2>
+    <div id="business-whatsapp" style="margin-bottom:8px;"></div>
+    <div id="business-whatsapp-edit" style="margin-bottom:8px; display:none;">
+      <form id="whatsapp-form" style="display:flex; gap:8px; align-items:center;">
+        <label for="whatsapp-input">מספר ווטסאפ:</label>
+        <input type="text" id="whatsapp-input" placeholder="למשל 0501234567" style="direction:ltr;">
+        <button type="submit">שמור</button>
+        <span id="whatsapp-save-status" style="color:green;"></span>
+      </form>
+    </div>
     <h1>הגדרות שירותים</h1>
     <div id="choose-action">
       <button id="new-business-btn">עסק חדש</button>
@@ -118,6 +128,7 @@
       document.getElementById("owner-greeting").after(ownerUrlDiv);
       loadServices();
       loadSubmissions();
+      loadBusinessDetails();
 
       // Save to localStorage
       localStorage.setItem("ownerToken", ownerToken);
@@ -151,6 +162,7 @@
       document.getElementById("owner-greeting").after(ownerUrlDiv);
       loadServices();
       loadSubmissions();
+      loadBusinessDetails();
 
       // Save to localStorage
       localStorage.setItem("ownerToken", ownerToken);
@@ -295,6 +307,43 @@
       });
     }
 
+    async function loadBusinessDetails() {
+      const res = await fetch(`${API_URL}/business-details?business_name=${encodeURIComponent(businessName)}`, {
+        headers: { "Authorization": ownerToken }
+      });
+      if (res.ok) {
+        const details = await res.json();
+        document.getElementById("business-whatsapp").textContent = `מספר ווטסאפ של העסק: ${details.whatsapp || "לא הוגדר"}`;
+        document.getElementById("whatsapp-input").value = details.whatsapp || "";
+      }
+    }
+
+    document.getElementById("whatsapp-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const whatsapp = document.getElementById("whatsapp-input").value.trim();
+      const statusSpan = document.getElementById("whatsapp-save-status");
+      statusSpan.textContent = "";
+      const res = await fetch(`${API_URL}/business-details/update`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": ownerToken
+        },
+        body: JSON.stringify({
+          business_name: businessName,
+          whatsapp
+        })
+      });
+      if (res.ok) {
+        statusSpan.textContent = "נשמר!";
+        loadBusinessDetails();
+      } else {
+        statusSpan.textContent = "שגיאה בשמירה";
+        statusSpan.style.color = "red";
+      }
+      setTimeout(() => { statusSpan.textContent = ""; statusSpan.style.color = "green"; }, 2000);
+    });
+
     const backBtn = document.getElementById("back-btn");
 
     backBtn.onclick = function() {
@@ -321,6 +370,7 @@
       document.getElementById("services-section").style.display = "block";
       document.getElementById("choose-action").style.display = "none";
       backBtn.style.display = "inline-block";
+      document.getElementById("business-whatsapp-edit").style.display = "block";
     }
   </script>
 </body>
