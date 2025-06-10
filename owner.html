@@ -118,8 +118,7 @@
       afterOwnerLoginOrRegister();
 
       // Save to localStorage
-      localStorage.setItem("ownerToken", ownerToken);
-      localStorage.setItem("businessName", businessName);
+      saveOwnerSession(ownerToken, businessName);
     });
 
     // Handle owner login
@@ -134,8 +133,7 @@
       }
       const data = await res.json();
       ownerToken = `Bearer ${data.token}`;
-      localStorage.setItem("ownerToken", ownerToken);
-      localStorage.setItem("businessName", businessName);
+      saveOwnerSession(ownerToken, businessName);
 
       document.getElementById("owner-login-form").style.display = "none";
       afterOwnerLoginOrRegister();
@@ -157,8 +155,7 @@
       loadServices();
       loadSubmissions();
       loadBusinessDetails();
-      localStorage.setItem("ownerToken", ownerToken);
-      localStorage.setItem("businessName", businessName);
+      saveOwnerSession(ownerToken, businessName);
     }
 
     // Load current services from backend
@@ -341,9 +338,7 @@
     const backBtn = document.getElementById("back-btn");
 
     backBtn.onclick = function() {
-      ["services-section", "submissions-section", "business-whatsapp-edit", "owner-register-form", "owner-login-form"].forEach(id => {
-        document.getElementById(id).style.display = "none";
-      });
+      hideSections("services-section", "submissions-section", "business-whatsapp-edit", "owner-register-form", "owner-login-form");
       document.getElementById("choose-action").style.display = "block";
       backBtn.style.display = "none";
       clearForms();
@@ -381,6 +376,15 @@
         try { return JSON.parse(details.business_details); } catch { return {}; }
       }
       return details.business_details || {};
+    }
+
+    function hideSections(...ids) {
+      ids.forEach(id => document.getElementById(id).style.display = "none");
+    }
+
+    function saveOwnerSession(token, name) {
+      localStorage.setItem("ownerToken", token);
+      localStorage.setItem("businessName", name);
     }
   </script>
 </body>
