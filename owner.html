@@ -360,21 +360,26 @@
     const backBtn = document.getElementById("back-btn");
 
     backBtn.onclick = function() {
+      // Hide all owner-related sections
       document.getElementById("services-section").style.display = "none";
+      document.getElementById("submissions-section").style.display = "none";
+      document.getElementById("business-whatsapp-edit").style.display = "none";
       document.getElementById("choose-action").style.display = "block";
       backBtn.style.display = "none";
-      // Hide owner greeting and WhatsApp display
-      document.getElementById("owner-greeting").textContent = "";
-      document.getElementById("business-whatsapp").textContent = "";
-      document.getElementById("business-whatsapp-edit").style.display = "none";
+
       // Clear login form fields
       document.getElementById("business-name").value = "";
       document.getElementById("owner-password").value = "";
-      // Hide and clear הזמנות אחרונות
-      document.getElementById("submissions-section").style.display = "none";
-      document.getElementById("submissions-list").innerHTML = "";
+
+      // Clear owner greeting
+      document.getElementById("owner-greeting").textContent = "";
+
       // Remove all owner URL links
       document.querySelectorAll('.owner-url-link').forEach(el => el.remove());
+
+      // Clear הזמנות אחרונות
+      document.getElementById("submissions-list").innerHTML = "";
+
       // Clear business details from variables and localStorage
       ownerToken = null;
       businessName = "";
