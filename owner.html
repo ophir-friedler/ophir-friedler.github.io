@@ -312,18 +312,18 @@
       });
       if (res.ok) {
         const details = await res.json();
-        console.log("Backend details response:", details); // <--- Add this line
+        console.log("Backend details response:", details);
         let detailsObj = {};
-        if (typeof details.details === "string") {
+        if (typeof details.business_details === "string") {
           try {
-            detailsObj = JSON.parse(details.details);
+            detailsObj = JSON.parse(details.business_details);
           } catch {
             detailsObj = {};
           }
         } else {
-          detailsObj = details.details || {};
+          detailsObj = details.business_details || {};
         }
-        console.log("Parsed detailsObj:", detailsObj); // <--- And this line
+        console.log("Parsed detailsObj:", detailsObj);
         document.getElementById("whatsapp-input").value = detailsObj.whatsapp || "";
       }
     }
@@ -341,7 +341,7 @@
         },
         body: JSON.stringify({
           business_name: businessName,
-          details: { whatsapp }
+          business_details: { whatsapp }
         })
       });
       if (res.ok) {
