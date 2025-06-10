@@ -298,6 +298,9 @@
       document.getElementById("services-section").style.display = "none";
       document.getElementById("choose-action").style.display = "block";
       backBtn.style.display = "none";
+      // Clear login form fields
+      document.getElementById("business-name").value = "";
+      document.getElementById("owner-password").value = "";
     };
 
     // Show the back button when showing the services section
