@@ -174,14 +174,14 @@
       listDiv.innerHTML = "";
       services.forEach((service, idx) => {
         const name = typeof service === "object" ? service.service_name : service;
-        let details = typeof service === "object" ? service.details || "" : "";
+        let services_details = typeof service === "object" ? service.services_details || "" : "";
         let time = "";
-        if (details) {
+        if (services_details) {
           try {
-            const detailsObj = JSON.parse(details);
-            time = detailsObj.time ? detailsObj.time.replace(" דקות", "") : "";
+            const servicesDetailsObj = JSON.parse(services_details);
+            time = servicesDetailsObj.time ? servicesDetailsObj.time.replace(" דקות", "") : "";
           } catch (e) {
-            const match = details.match(/(\d+)\s*דקות/);
+            const match = services_details.match(/(\d+)\s*דקות/);
             if (match) time = match[1];
           }
         }
@@ -212,14 +212,14 @@
       // Get current services from the DOM
       const currentServices = Array.from(document.querySelectorAll('.service-input')).map((i, idx) => ({
         service_name: i.value,
-        details: JSON.stringify({
+        services_details: JSON.stringify({
           time: document.querySelectorAll('.time-input')[idx].value ? `${document.querySelectorAll('.time-input')[idx].value} דקות` : ""
         })
       }));
       // Add a new empty service row
       renderServices([
         ...currentServices,
-        { service_name: "", details: JSON.stringify({ time: "" }) }
+        { service_name: "", services_details: JSON.stringify({ time: "" }) }
       ]);
     };
 
@@ -231,7 +231,7 @@
       const timeInputs = document.querySelectorAll('.time-input');
       const services = Array.from(serviceInputs).map((input, idx) => ({
         service_name: input.value.trim(),
-        details: JSON.stringify({
+        services_details: JSON.stringify({
           time: timeInputs[idx].value ? `${timeInputs[idx].value} דקות` : ""
         })
       })).filter(s => s.service_name);

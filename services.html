@@ -110,14 +110,14 @@
       services.forEach(service => {
         const name = service.service_name;
         let time = "";
-        // Try to extract time from details
-        if (service.details) {
+        // Try to extract time from services_details
+        if (service.services_details) {
           try {
-            const detailsObj = typeof service.details === "string" ? JSON.parse(service.details) : service.details;
+            const detailsObj = typeof service.services_details === "string" ? JSON.parse(service.services_details) : service.services_details;
             time = detailsObj.time || "";
           } catch (e) {
             // fallback: try to extract with regex
-            const match = service.details.match(/(\d+)\s*דקות/);
+            const match = service.services_details.match(/(\d+)\s*דקות/);
             if (match) time = match[0];
           }
         }
