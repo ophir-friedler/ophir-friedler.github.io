@@ -155,7 +155,6 @@
       loadServices();
       loadSubmissions();
       loadBusinessDetails();
-      saveOwnerSession(ownerToken, businessName);
     }
 
     // Load current services from backend
@@ -347,8 +346,7 @@
       document.getElementById("submissions-list").innerHTML = "";
       ownerToken = null;
       businessName = "";
-      localStorage.removeItem("ownerToken");
-      localStorage.removeItem("businessName");
+      clearOwnerSession();
     };
 
     function clearForms() {
