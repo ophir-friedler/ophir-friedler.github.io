@@ -8,6 +8,9 @@
 </head>
 <body>
   <div class="container">
+    <button id="back-btn" style="background:none;border:none;cursor:pointer;font-size:2em;vertical-align:middle;color:magenta;" title="חזור">
+      &#8592;
+    </button>
     <h1 id="business-title">קביעת תור</h1>
     <form id="appointment-form">
       <label for="user_input">מספר נייד:</label>
@@ -39,6 +42,9 @@
     window.location.href = `services.html?business_name=${encodeURIComponent(businessName)}`;
   });
 
+  document.getElementById("back-btn").onclick = function() {
+    window.history.back();
+  };
   </script>
 </body>
 </html>
