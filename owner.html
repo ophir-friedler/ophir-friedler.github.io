@@ -337,12 +337,15 @@
       });
       if (res.ok) {
         statusSpan.textContent = "נשמר!";
+        statusSpan.style.color = "green";
         loadBusinessDetails();
       } else {
         statusSpan.textContent = "שגיאה בשמירה";
         statusSpan.style.color = "red";
       }
-      setTimeout(() => { statusSpan.textContent = ""; statusSpan.style.color = "green"; }, 2000);
+      if (statusSpan.textContent !== "שגיאה בשמירה") {
+        setTimeout(() => { statusSpan.textContent = ""; statusSpan.style.color = "green"; }, 2000);
+      }
     });
 
     const backBtn = document.getElementById("back-btn");
