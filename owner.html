@@ -104,8 +104,8 @@
         submitBtn.disabled = false;
         return;
       }
-      ownerToken = `Bearer ${businessName}-token`;
       businessName = name;
+      ownerToken = `Bearer ${businessName}-token`;
       document.getElementById("owner-register-form").style.display = "none";
       showServicesSection();
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
@@ -130,6 +130,7 @@
     document.getElementById("owner-login-form").addEventListener("submit", async function(event) {
       event.preventDefault();
       businessName = document.getElementById("business-name").value.trim();
+      ownerToken = `Bearer ${businessName}-token`;
       const password = document.getElementById("owner-password").value;
       const res = await fetch(`${API_URL}/owner-login?business=${encodeURIComponent(businessName)}&password=${encodeURIComponent(password)}`);
       if (res.status !== 200) {
