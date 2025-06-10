@@ -325,7 +325,30 @@
       const whatsapp = document.getElementById("whatsapp-input").value.trim();
       const statusSpan = document.getElementById("whatsapp-save-status");
       statusSpan.textContent = "";
-      const res = await fetch(`${API_URL}/business-details/update`, {
+
+      // Fetch current business_details first
+      let business_detailsObj = {};
+      try {
+        const res = await fetch(`${API_URL}/business-details?business_name=${encodeURIComponent(businessName)}`, {
+          headers: { "Authorization": ownerToken }
+        });
+        if (res.ok) {
+          const details = await res.json();
+          if (typeof details.business_details === "string") {
+            business_detailsObj = JSON.parse(details.business_details);
+          } else {
+            business_detailsObj = details.business_details || {};
+          }
+        }
+      } catch (e) {
+        business_detailsObj = {};
+      }
+
+      // Update whatsapp in business_details
+      business_detailsObj.whatsapp = whatsapp;
+
+      // Save updated business_details
+      const res2 = await fetch(`${API_URL}/business-details/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -333,10 +356,11 @@
         },
         body: JSON.stringify({
           business_name: businessName,
-          business_details: { whatsapp }
+          business_details: business_detailsObj
         })
       });
-      if (res.ok) {
+
+      if (res2.ok) {
         statusSpan.textContent = "נשמר!";
         statusSpan.style.color = "green";
         loadBusinessDetails();
@@ -344,7 +368,7 @@
         statusSpan.textContent = "שגיאה בשמירה";
         statusSpan.style.color = "red";
       }
-      if (statusSpan.textContent !== "שגיאה בששמירה") {
+      if (statusSpan.textContent !== "שגיאה בשמירה") {
         setTimeout(() => { statusSpan.textContent = ""; statusSpan.style.color = "green"; }, 2000);
       }
     });
