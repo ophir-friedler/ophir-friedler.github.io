@@ -132,7 +132,11 @@
         alert("שם העסק או סיסמה שגויים");
         return;
       }
-      ownerToken = `Bearer ${businessName}-token`;
+      // After successful login/register
+      const data = await res.json();
+      ownerToken = `Bearer ${data.token}`;
+      localStorage.setItem("ownerToken", ownerToken);
+
       document.getElementById("owner-login-form").style.display = "none";
       afterOwnerLoginOrRegister();
 
