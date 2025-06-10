@@ -174,7 +174,6 @@
       services.forEach((service, idx) => {
         const name = typeof service === "object" ? service.service_name : service;
         let details = typeof service === "object" ? service.details || "" : "";
-        // Parse details if it's a JSON string
         let time = "";
         if (details) {
           try {
@@ -187,13 +186,21 @@
         }
         const div = document.createElement("div");
         div.className = "service-row";
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        div.style.marginBottom = "12px";
         div.innerHTML = `
-          <input type="text" value="${name}" data-idx="${idx}" class="service-input" placeholder="שם שירות">
-          <label style="margin-right:8px;">
-            <span>זמן</span>
-            <input type="number" min="1" value="${time}" class="time-input" placeholder="משך (דקות)">
-          </label>
-          <button type="button" onclick="this.parentElement.remove()">מחק</button>
+          <div style="display:flex; flex-direction:column; flex:1; gap:4px;">
+            <label>
+              <span>שם שירות</span>
+              <input type="text" value="${name}" data-idx="${idx}" class="service-input" placeholder="שם שירות">
+            </label>
+            <label>
+              <span>זמן</span>
+              <input type="number" min="1" value="${time}" class="time-input" placeholder="משך (דקות)">
+            </label>
+          </div>
+          <button type="button" onclick="this.parentElement.remove()" style="margin-right:16px; min-width:60px;">מחק</button>
         `;
         listDiv.appendChild(div);
       });
