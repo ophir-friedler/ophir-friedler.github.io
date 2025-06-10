@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class="container">
+    <button id="back-btn" class="back-arrow-btn" title="חזור">&#8592;</button>
     <h1>בחר תאריך ושעה</h1>
     <form id="date-form">
       <label for="selected_time">תאריך ושעה:</label>
@@ -59,6 +60,10 @@
         document.getElementById("status").textContent = "שגיאה בחיבור לשרת.";
       }
     });
+
+    document.getElementById("back-btn").onclick = function() {
+      window.history.back();
+    };
   </script>
 </body>
 </html>

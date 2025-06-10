@@ -82,7 +82,7 @@ button:hover {
 
 .delete-btn {
   align-self: stretch;
-  height: auto;
+height: auto;
   aspect-ratio: 1/1;
   min-width: 36px;
   max-width: 48px;
