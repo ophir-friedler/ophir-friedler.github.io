@@ -305,18 +305,18 @@
       if (res.ok) {
         const details = await res.json();
         console.log("Backend details response:", details);
-        let detailsObj = {};
+        let business_detailsObj = {};
         if (typeof details.business_details === "string") {
           try {
-            detailsObj = JSON.parse(details.business_details);
+            business_detailsObj = JSON.parse(details.business_details);
           } catch {
-            detailsObj = {};
+            business_detailsObj = {};
           }
         } else {
-          detailsObj = details.business_details || {};
+          business_detailsObj = details.business_details || {};
         }
-        console.log("Parsed detailsObj:", detailsObj);
-        document.getElementById("whatsapp-input").value = detailsObj.whatsapp || "";
+        console.log("Parsed business_detailsObj:", business_detailsObj);
+        document.getElementById("whatsapp-input").value = business_detailsObj.whatsapp || "";
       }
     }
 
