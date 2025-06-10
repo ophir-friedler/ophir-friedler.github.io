@@ -47,7 +47,6 @@
       <h3>עריכת שירותים</h3>
       <form id="services-form">
         <div id="services-list"></div>
-        <input type="text" id="new-service" placeholder="הוסף שירות חדש">
         <button type="button" id="add-service">הוסף שירות</button>
         <br><br>
         <button type="submit">שמור שינויים</button>
@@ -206,16 +205,18 @@
 
     // Add new service
     document.getElementById("add-service").onclick = function() {
-      const newService = document.getElementById("new-service").value.trim();
-      if (newService) {
-        // Add with empty time
-        const currentServices = Array.from(document.querySelectorAll('.service-input')).map((i, idx) => ({
-          service_name: i.value,
-          details: document.querySelectorAll('.time-input')[idx].value ? `${document.querySelectorAll('.time-input')[idx].value} דקות` : ""
-        }));
-        renderServices([...currentServices, { service_name: newService, details: "" }]);
-        document.getElementById("new-service").value = "";
-      }
+      // Get current services from the DOM
+      const currentServices = Array.from(document.querySelectorAll('.service-input')).map((i, idx) => ({
+        service_name: i.value,
+        details: JSON.stringify({
+          time: document.querySelectorAll('.time-input')[idx].value ? `${document.querySelectorAll('.time-input')[idx].value} דקות` : ""
+        })
+      }));
+      // Add a new empty service row
+      renderServices([
+        ...currentServices,
+        { service_name: "", details: JSON.stringify({ time: "" }) }
+      ]);
     };
 
     // Save services to backend
