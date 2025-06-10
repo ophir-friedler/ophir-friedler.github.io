@@ -313,8 +313,9 @@
       });
       if (res.ok) {
         const details = await res.json();
-        document.getElementById("business-whatsapp").textContent = `מספר ווטסאפ של העסק: ${details.whatsapp || "לא הוגדר"}`;
-        document.getElementById("whatsapp-input").value = details.whatsapp || "";
+        // details.details is the JSONB object
+        document.getElementById("business-whatsapp").textContent = `מספר ווטסאפ של העסק: ${details.details?.whatsapp || "לא הוגדר"}`;
+        document.getElementById("whatsapp-input").value = details.details?.whatsapp || "";
       }
     }
 
@@ -331,7 +332,7 @@
         },
         body: JSON.stringify({
           business_name: businessName,
-          whatsapp
+          details: { whatsapp }
         })
       });
       if (res.ok) {
@@ -350,6 +351,10 @@
       document.getElementById("services-section").style.display = "none";
       document.getElementById("choose-action").style.display = "block";
       backBtn.style.display = "none";
+      // Hide owner greeting and WhatsApp display
+      document.getElementById("owner-greeting").textContent = "";
+      document.getElementById("business-whatsapp").textContent = "";
+      document.getElementById("business-whatsapp-edit").style.display = "none";
       // Clear login form fields
       document.getElementById("business-name").value = "";
       document.getElementById("owner-password").value = "";
