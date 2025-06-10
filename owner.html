@@ -302,6 +302,9 @@
       // Clear login form fields
       document.getElementById("business-name").value = "";
       document.getElementById("owner-password").value = "";
+      // Hide and clear הזמנות אחרונות
+      document.getElementById("submissions-section").style.display = "none";
+      document.getElementById("submissions-list").innerHTML = "";
     };
 
     // Show the back button when showing the services section
