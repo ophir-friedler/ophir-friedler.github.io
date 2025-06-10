@@ -107,6 +107,7 @@
       showServicesSection();
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
       const ownerUrlDiv = document.createElement("div");
+      ownerUrlDiv.className = "owner-url-link";
       ownerUrlDiv.style.margin = "10px 0";
       ownerUrlDiv.innerHTML = `
         <span>קישור לעמוד העסק שלך:</span>
@@ -139,6 +140,7 @@
       showServicesSection();
       document.getElementById("owner-greeting").textContent = `שלום ${businessName}`;
       const ownerUrlDiv = document.createElement("div");
+      ownerUrlDiv.className = "owner-url-link";
       ownerUrlDiv.style.margin = "10px 0";
       ownerUrlDiv.innerHTML = `
         <span>קישור לעמוד העסק שלך:</span>
@@ -305,6 +307,13 @@
       // Hide and clear הזמנות אחרונות
       document.getElementById("submissions-section").style.display = "none";
       document.getElementById("submissions-list").innerHTML = "";
+      // Remove all owner URL links
+      document.querySelectorAll('.owner-url-link').forEach(el => el.remove());
+      // Clear business details from variables and localStorage
+      ownerToken = null;
+      businessName = "";
+      localStorage.removeItem("ownerToken");
+      localStorage.removeItem("businessName");
     };
 
     // Show the back button when showing the services section
